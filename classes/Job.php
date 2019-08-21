@@ -8,9 +8,11 @@ class Job
     private $dependencyList = array();
     private $dependencies = array(); // Array containing references to the job's dependencies
     private $dependants = array(); // Array containing references to the job's dependants. Possibly not used yet, but could be a useful addition
+    private $testing = false; // Variable to signify whether or not tests are being run
 
-    function __construct($name, $dependencies)
+    function __construct($name, $dependencies, $testing = false)
     {
+        $this->testing = $testing; // Set testing variable first so it is ready in case of errors
         $this->jobName = $name;
         $this->dependencyList = $this->processDependencyList($dependencies);
     }
@@ -73,7 +75,7 @@ class Job
         catch (Exception $e)
         {
             echo 'Caught exception: ',  $e->getMessage(), "\n", 'Exiting now!', "\n";
-            if (!isset($testing) || !$testing) exit; // Unrecoverable error. Exit the program
+            if (!$this->testing) exit; // Unrecoverable error. Exit the program
         }
 
         return array();
