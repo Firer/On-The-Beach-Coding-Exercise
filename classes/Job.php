@@ -53,7 +53,7 @@ class Job
             {
                 if ($splitList = explode(',', $dependencies))
                 {
-                    return array_map('trim', $splitList); // Remove whitespace from job names
+                    return array_filter(array_map('trim', $splitList), 'strlen'); // Remove whitespace from job names with array_map callback to trim, and remove empty elements (strings of length 0) with array_filter callback to strlen
                 }
             }
             else if (gettype($dependencies) === 'array')
@@ -62,7 +62,7 @@ class Job
                 {
                     if (gettype($dependency) !== 'string') throw new Exception('An array of dependencies must contain string values only');
                 }
-                
+
                 return $dependencies;
             }
             else
