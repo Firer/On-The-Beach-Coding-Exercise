@@ -73,7 +73,7 @@ class Job
         catch (Exception $e)
         {
             echo 'Caught exception: ',  $e->getMessage(), "\n", 'Exiting now!', "\n";
-            exit;
+            if (!isset($testing) || !$testing) exit; // Unrecoverable error. Exit the program
         }
 
         return array();
