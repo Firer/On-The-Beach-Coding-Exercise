@@ -52,14 +52,14 @@ class JobTest extends TestCase
 
     public function testJobCreationArrayException() // Job creation using a dependency array ahould only contain string elements. Test for exception if that's not the case
     {
-        $this->expectException(Error::class, 'Assertion 19: ');
+        $this->expectExceptionMessage('An array of', 'Assertion 19: ');
 
         $testJob = new Job('a', array('b', false, 'c'), true);
     }
 
     public function testJobCreationInputException() // Job creation using accepts only either a string or an array in its dependency parameter. Test for exception if that's not the case
     {
-        $this->expectException(Error::class, 'Assertion 20: ');
+        $this->expectExceptionMessage('A job\'s dependencies', 'Assertion 20: ');
 
         $testJob = new Job('a', false, true);
     }
