@@ -63,4 +63,14 @@ class JobTest extends TestCase
 
         $testJob = new Job('a', false);
     }
+
+    public function testJobSequenceCreation() // JobSequence creation using test jobs
+    {
+        $testJob1 = new Job('a', array());
+        $testJob2 = new Job('b', array('c', 'd'));
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2));
+        $this->assertSame(array('a' => $testJob1, 'b' => $testJob2), $testSequence->getRawJobList(), 'Assertion 21: Test simple JobSequence creation');
+
+    }
 }
