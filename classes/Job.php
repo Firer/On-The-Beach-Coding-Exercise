@@ -58,12 +58,12 @@ class Job
             }
         } else if (gettype($dependencies) === 'array') {
             foreach ($dependencies as $dependency) {
-                if (gettype($dependency) !== 'string') throw new Exception('An array of dependencies must contain string values only');
+                if (gettype($dependency) !== 'string') throw new Exception('Job '. $this->jobName . ': An array of dependencies must contain string values only');
             }
 
             return $dependencies;
         } else {
-            throw new Exception('A job\'s dependencies must be a comma separated string, or an array of strings');
+            throw new Exception('Job '. $this->jobName . 'A job\'s dependencies must be a comma separated string, or an array of strings');
         }
 
         return array();
