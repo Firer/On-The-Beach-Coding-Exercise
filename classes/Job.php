@@ -4,8 +4,9 @@ class Job
 {
     private $jobName = ''; // String containing the job's name
     private $jobQueued = false; // Is the job already queued or not?
+    private $jobWasRun = false; // The job's run status
     private $dependenciesResolved = 0; // Have the job's dependencies been resolved yet? -1 -> in progress, 0 -> false, 1 -> true
-    private $dependencyList = array();
+    private $dependencyList = array(); // Array containing the names of the job's dependencies
     private $dependencies = array(); // Array containing references to the job's dependencies
     private $dependants = array(); // Array containing references to the job's dependants. Possibly not used yet, but could be a useful addition
 
@@ -23,6 +24,11 @@ class Job
     public function getJobQueued()
     {
         return $this->jobQueued;
+    }
+
+    public function jobWasRun()
+    {
+        return $this->jobWasRun;
     }
 
     public function getDependenciesResolved()
@@ -43,6 +49,41 @@ class Job
     public function getDependants()
     {
         return $this->dependants;
+    }
+
+    public function addDependency(&$dependency) // Explicitly use references to jobs
+    {
+        if (!($dependency instanceof Job))  throw new Exception('Tried to add dependency that isn\'t a Job'); // Check the job is a Job object
+        $this->dependencies[] = $dependency;
+    }
+
+    public function resolveDependencies(&$jobList) // Explicitly use references to jobs
+    {
+        if ($this->dependenciesResolved === 1) return; // This job has been resolved already
+        if ($this->dependenciesResolved === -1) throw new Exception('Job '. $this->jobName . 'This job contains a circular dependency'); // We are attempting to resolve this job when we are already trying to resolve it, so it must have a circular dependency
+
+        $this->dependenciesResolved = -1; // Set flag to signify this Job's dependencies are currently being resolved
+
+        foreach ($this->dependencyList as $dependencyName)
+        {
+            $this->addDependency($jobList[$dependencyName]); // Add our dependency to this Job
+            $jobList[$dependencyName]->resolveDependencies($jobList); // Recursively resolve the added job's dependencies to find if any are circular
+        }
+
+        $this->dependenciesResolved = 1; // This job's dependencies were successfully resolved
+    }
+
+    public function run()
+    {
+        if ($this->dependenciesResolved !== 1) throw new Exception('Job '. $this->jobName . 'Cannot run job before dependencies are resolved'); // Dependencies must be resolved before we can continue
+        foreach ($this->dependencies as $dependency)
+        {
+            if (!$dependency->jobWasRun()) throw new Exception('Job '. $this->jobName . 'Tried to run job before a dependency has been run'); // Cannot run a job before its dependencies have been run
+        }
+
+        // Call code to do the job here
+
+        $this->jobWasRun = true;
     }
 
     private function processDependencyList($dependencies) // Dependencies are accepted in multiple forms. Do input validation to make sure they are what is expected and process it
