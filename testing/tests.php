@@ -50,16 +50,16 @@ class JobTest extends TestCase
         $this->assertSame(array('e', 'f', 'g'), $testJob->getDependencyList(), 'Assertion 18: Test case for string with spaces after comma. Should be 3 element array of our dependencies');
     }
 
-    public function testJobCreationArrayException() // Job creation using a dependency array ahould only contain string elements. Test for exception if that's not the case
+    public function testJobCreationArrayException() // Job creation using a dependency array should only contain string elements. Test for exception if that's not the case
     {
-        $this->expectExceptionMessage('An array of', 'Assertion 19: ');
+        $this->expectExceptionMessage('An array of', 'Assertion 19: Job dependency array with non string element');
 
         $testJob = new Job('a', array('b', false, 'c'));
     }
 
-    public function testJobCreationInputException() // Job creation using accepts only either a string or an array in its dependency parameter. Test for exception if that's not the case
+    public function testJobCreationInputException() // Job creation accepts only either a string or an array in its dependency parameter. Test for exception if that's not the case
     {
-        $this->expectExceptionMessage('A job\'s dependencies', 'Assertion 20: ');
+        $this->expectExceptionMessage('A job\'s dependencies', 'Assertion 20: Job dependence not a string or array');
 
         $testJob = new Job('a', false);
     }
@@ -72,5 +72,25 @@ class JobTest extends TestCase
         $testSequence = new JobSequence(array($testJob1, $testJob2));
         $this->assertSame(array('a' => $testJob1, 'b' => $testJob2), $testSequence->getRawJobList(), 'Assertion 21: Test simple JobSequence creation');
 
+    }
+
+    public function testJobSequenceCreationExceptionNotAJob() // Check for exception when trying to create a JobSequence when an input is not a Job object
+    {
+        $testJob1 = new Job('a', array());
+        $testJob2 = true;
+
+        $this->expectExceptionMessage('isn\'t a Job', 'Assertion 22: Creating JobSequence when input is not a job');
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2));
+    }
+
+    public function testJobSequenceCreationDuplicateJobNames() // Check for exception when trying to create a JobSequence when multiple Jobs have the same name
+    {
+        $testJob1 = new Job('a', array());
+        $testJob2 = new Job('a', array('b', 'c'));
+
+        $this->expectExceptionMessage('Multiple jobs exist', 'Assertion 22: Testing JobSequence creation with multiple jobs with the same name');
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2));
     }
 }
