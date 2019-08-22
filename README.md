@@ -15,3 +15,5 @@ Exercise for On The Beach to demonstrate coding, problem solving, and design abi
 * Avoid making it unnecessarily complex
 * Don't really need any dependencies. Make it as easy as possible for me to run along with anybody who may be looking at it
 * Having the code run on a remote system means an annoying number of commits during testing and debugging
+* Jobs should have a "run" member function that checks all dependencies are resolved (have been run), runs the job if they are, and throws an error if not. It then sets a member variable to demonstrate the job has finished
+* Make a JobSequence class with a member variable of an array containing the Jobs to sequence, and member functions to sequence it
