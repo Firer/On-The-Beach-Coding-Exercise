@@ -9,7 +9,7 @@ class Job
     private $dependencies = array(); // Array containing references to the job's dependencies
     private $dependants = array(); // Array containing references to the job's dependants. Possibly not used yet, but could be a useful addition
 
-    function __construct($name, $dependencies, $testing = false)
+    function __construct($name, $dependencies)
     {
         $this->jobName = $name;
         $this->dependencyList = $this->processDependencyList($dependencies);
@@ -51,7 +51,10 @@ class Job
         if (gettype($dependencies) === 'string') // Job list is comma separated list of names. Split it and create an array
         {
             if ($splitList = explode(',', $dependencies)) {
-                return array_filter(array_map('trim', $splitList), 'strlen'); // Remove whitespace from job names with array_map callback to trim, and remove empty elements (strings of length 0) with array_filter callback to strlen
+                $dependencies = array_map('trim', $splitList); // Remove whitespace from job names
+                $dependencies = array_filter($dependencies, 'strlen'); // Remove empty elements (strings of length 0) from the array)
+                $dependencies = array_values($dependencies); // Fix the array indexing. The previous operation preserves the old indexes, converting it to an associative array
+                return $dependencies;
             }
         } else if (gettype($dependencies) === 'array') {
             foreach ($dependencies as $dependency) {
