@@ -152,7 +152,7 @@ class JobTest extends TestCase
 
         $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
 
-        $this->expectExceptionMessage('does not exist', 'Assertion 1.31: Test for self dependency exception');
+        $this->expectExceptionMessage('does not exist', 'Assertion 1.31: Test for non existent dependency exception');
 
         foreach ($jobArray as $job)
         {
@@ -160,7 +160,7 @@ class JobTest extends TestCase
         }
     }
 
-    public static function testJobRun()
+    public function testJobRun()
     {
         $testJob1 = new Job('a', array('b', 'c'));
         $testJob2 = new Job('b', array('c'));
