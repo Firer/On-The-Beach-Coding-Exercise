@@ -109,7 +109,7 @@ class JobTest extends TestCase
 
         $this->assertSame(array(), $testJob1->getDependents(), 'Assertion 1.27: Job 1 should have no dependents');
         $this->assertSame(array($testJob1), $testJob2->getDependents(), 'Assertion 1.27: Job 2 should have 1 dependent');
-        $this->assertSame(array($testJob1, $testJob2), $testJob3->getDependents(), 'Assertion 1.28: Job 3 should have 2 dependents');
+        $this->assertSame(array($testJob2, $testJob1), $testJob3->getDependents(), 'Assertion 1.28: Job 3 should have 2 dependents');
     }
 
     public function testJobResolveDependenciesCircularException()
