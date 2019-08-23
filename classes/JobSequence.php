@@ -44,7 +44,6 @@ class JobSequence
 
         foreach ($this->rawJobList as $job)
         {
-            if ($job->getDependenciesResolved() === 1) break; // This Job has been resolved already
             $job->resolveDependencies($this->rawJobList); // Give the job access to the raw job list to resolve its own dependencies
         }
     }
