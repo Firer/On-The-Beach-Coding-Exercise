@@ -76,6 +76,150 @@ class JobTest extends TestCase
         $this->assertSame(array($testJob2, $testJob3), $testJob1->getDependencies(), 'Assertion 1.21: Adding dependencies to jobs');
     }
 
+    public function testJobAddDependent() // Adding dependents to jobs that exist
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c', 'd'));
+        $testJob3 = new Job('c', array());
+
+        $testJob2->addDependent($testJob1);
+        $testJob3->addDependent($testJob1);
+        $testJob3->addDependent($testJob2);
+
+        $this->assertSame(array($testJob1), $testJob2->getDependents(), 'Assertion 1.22: Adding dependents to jobs');
+        $this->assertSame(array($testJob1, $testJob2), $testJob3->getDependents(), 'Assertion 1.23: Adding dependents to jobs');
+    }
+
+    public function testJobResolveDependencies()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array());
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+
+        $this->assertSame(array($testJob2, $testJob3), $testJob1->getDependencies(), 'Assertion 1.24: Job 1 should have 2 dependencies');
+        $this->assertSame(array($testJob3), $testJob2->getDependencies(), 'Assertion 1.25: Job 2 should have 1 dependency');
+        $this->assertSame(array(), $testJob3->getDependencies(), 'Assertion 1.26: Job 3 should have no dependencies');
+
+        $this->assertSame(array(), $testJob1->getDependents(), 'Assertion 1.27: Job 1 should have no dependents');
+        $this->assertSame(array($testJob1), $testJob2->getDependents(), 'Assertion 1.27: Job 2 should have 1 dependent');
+        $this->assertSame(array($testJob1, $testJob2), $testJob3->getDependents(), 'Assertion 1.28: Job 3 should have 2 dependents');
+    }
+
+    public function testJobResolveDependenciesCircularException()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array('a'));
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        $this->expectExceptionMessage('circular dependency', 'Assertion 1.29: Test for circular dependency exception');
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+    }
+
+    public function testJobResolveDependenciesSelfDependencyException()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array('c'));
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        $this->expectExceptionMessage('depend on itself', 'Assertion 1.30: Test for self dependency exception');
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+    }
+
+    public function testJobResolveDependenciesNonExistentDependencyException()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array('d'));
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        $this->expectExceptionMessage('does not exist', 'Assertion 1.31: Test for self dependency exception');
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+    }
+
+    public static function testJobRun()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array());
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+
+        $jobList = array('c', 'b', 'a'); // Manually order job list so dependencies are resolved
+
+        $resultArray = array();
+
+        foreach ($jobList as $jobName)
+        {
+            $jobArray[$jobName]->run();
+            $resultArray[] = $jobArray[$jobName]->jobWasRun();
+        }
+
+        $this->assertSame(array(true, true, true), $resultArray, 'Assertion 1.32: Test that jobs run successfully');
+    }
+
+    public function testJobRunResolutionException()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+
+        $this->expectExceptionMessage('before dependencies are resolved', 'Assertion 1.33: Test trying to run a job before dependencies are resolved exception');
+
+        $testJob1->run();
+    }
+
+    public function testJobRunDependencyException()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array());
+
+        $jobArray = array('a' => $testJob1, 'b' => $testJob2, 'c' => $testJob3);
+
+        foreach ($jobArray as $job)
+        {
+            $job->resolveDependencies($jobArray);
+        }
+
+        $jobList = array('a', 'b', 'c'); // Manually order job list so dependencies are not resolved
+
+        $this->expectExceptionMessage('before dependencies are resolved', 'Assertion 1.34: Test trying to run a job before dependencies are run');
+
+        foreach ($jobList as $jobName)
+        {
+            $jobArray[$jobName]->run();
+        }
+
+        $testJob1->run();
+    }
+
     public function testJobSequenceCreation() // JobSequence creation using test jobs
     {
         $testJob1 = new Job('a', array());
