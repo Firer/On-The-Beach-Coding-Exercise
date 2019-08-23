@@ -73,8 +73,10 @@ class JobSequence
             $jobNamesToSequence[] = $jobName;
         }
 
+        $jobsToSequenceCount = count($jobNamesToSequence);
+
         // The main pieces of this loop could also be done in the above loop for efficiency, but it is more clear when separated
-        for ($i = 0; $i < count($jobNamesToSequence); $i++) // First pass of job list, to add jobs with no dependencies to the sequence first. This should result in fewer searches in the job sequence array. The sequencing will still work fine without this entire loop.
+        for ($i = 0; $i < $jobsToSequenceCount; $i++) // First pass of job list, to add jobs with no dependencies to the sequence first. This should result in fewer searches in the job sequence array. The sequencing will still work fine without this entire loop.
         {
             $job = $this->rawJobList[$jobNamesToSequence[$i]];
             if ($job->getDependencies() === array()) // The job has no dependencies. Add it to the sequence and remove it from the to-be-sequenced list
