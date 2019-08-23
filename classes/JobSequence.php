@@ -91,6 +91,7 @@ class JobSequence
     private function addToSequencedJobList(&$jobNamesToSequence) // Recursive function for sequencing jobs after their dependencies
     {
         $startNumberOfJobs = count($jobNamesToSequence); // Track how many jobs we started with to make sure we made progress
+        if ($startNumberOfJobs === 0) return;
         for ($i =0; $i < $startNumberOfJobs; $i++) // Iterate through all jobs, and add them if possible
         {
             foreach ($this->rawJobList[$jobNamesToSequence[$i]]->getDependencyList() as $dependencyName) // We must check that all of a job's dependencies are already sequenced
