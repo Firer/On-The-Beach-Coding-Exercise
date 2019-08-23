@@ -10,7 +10,7 @@ class Job
     private $dependencies = array(); // Array containing references to the job's dependencies
     private $dependents = array(); // Array containing references to the job's dependents. Possibly not used yet, but could be a useful addition
 
-    function __construct($name, $dependencies)
+    function __construct($name, $dependencies) // Accepts name parameter, and dependency list in either string or array format
     {
         $this->jobName = $name;
         $this->dependencyList = $this->processDependencyList($dependencies);
@@ -82,7 +82,7 @@ class Job
         $this->dependenciesResolved = 1; // This job's dependencies were successfully resolved
     }
 
-    public function run()
+    public function run() // Run the job!
     {
         if ($this->dependenciesResolved !== 1) throw new Exception('Job '. $this->jobName . '. Cannot run job before dependencies are resolved'); // Dependencies must be resolved before we can continue
         foreach ($this->dependencies as $dependency)
