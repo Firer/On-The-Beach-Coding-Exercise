@@ -210,7 +210,7 @@ class JobTest extends TestCase
 
         $jobList = array('a', 'b', 'c'); // Manually order job list so dependencies are not resolved
 
-        $this->expectExceptionMessage('before dependencies are resolved', 'Assertion 1.34: Test trying to run a job before dependencies are run');
+        $this->expectExceptionMessage('before a dependency has been run', 'Assertion 1.34: Test trying to run a job before dependencies are run');
 
         foreach ($jobList as $jobName)
         {
