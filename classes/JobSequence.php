@@ -87,7 +87,7 @@ class JobSequence
         }
 
 
-        $this->addToSequencedJobList($jobNamesToSequence);
+        $this->addToSequencedJobList(array_values($jobNamesToSequence)); // Reset array indexes
     }
 
     private function addToSequencedJobList(&$jobNamesToSequence) // Recursive function for sequencing jobs after their dependencies
@@ -108,6 +108,6 @@ class JobSequence
         if (count($jobNamesToSequence) === 0) return; // No jobs left. No need to continue!
         if (count($jobNamesToSequence) === $startNumberOfJobs) throw new Exception('Cannot sequence jobs due to infinite recursion. Probably some circular dependency slipped through'); // Shouldn't ever end up here if circular dependency checking works correctly
 
-        $this->addToSequencedJobList($jobNamesToSequence); // We still have jobs, so use recursion to carry on
+        $this->addToSequencedJobList(array_values($jobNamesToSequence)); // We still have jobs, so use recursion to carry on. Reset array indexes first
     }
 }
