@@ -74,7 +74,7 @@ class JobSequence
             $job = $this->rawJobList[$jobNamesToSequence[$i]];
             if ($job->getDependencies() === array()) // The job has no dependencies. Add it to the sequence and remove it from the to-be-sequenced list
             {
-                $this->sequencedJobList[] = $job->getJobName;
+                $this->sequencedJobList[] = $job->getJobName();
                 unset($jobNamesToSequence[$i]); // Job has been added, so remove it from the array of jobs to add
             }
         }
@@ -90,7 +90,7 @@ class JobSequence
         {
             foreach ($this->rawJobList[$jobNamesToSequence[$i]]->getDependencyList() as $dependencyName) // We must check that all of a job's dependencies are already sequenced
             {
-                if (!in_array($dependencyName, $this->sequencedJobList)) break 2; // If a job's dependency isn't jet sequenced, break out from 2 loop levels
+                if (!in_array($dependencyName, $this->sequencedJobList)) continue 2; // If a job's dependency isn't jet sequenced, stop the loop up 2 levels and continue
             }
 
             $this->sequencedJobList[] = $jobNamesToSequence[$i]; // The job can be sequenced as all dependencies already happen first
