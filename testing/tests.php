@@ -10,6 +10,32 @@ spl_autoload_register(function ($className) {
 
 class JobTest extends TestCase
 {
+    public function testOnTheBeachSpecification() // Test all of the cases listed in the challenge PDF
+    {
+        $testSequence = new JobSequence(array());
+        $this->assertSame('', $testSequence->getSequencedJobListString(), 'Assertion 0.1: An empty job list should return an empty sequence');
+
+        $testSequence = new JobSequence(array(new Job('a', array())));
+        $this->assertSame('a', $testSequence->getSequencedJobListString(), 'Assertion 0.2: A single job with no dependency');
+
+        $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array()), new Job('c', array())));
+        $this->assertSame('a, b, c', $testSequence->getSequencedJobListString(), 'Assertion 0.3: Three jobs each with no dependency');
+
+        $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array('c')), new Job('c', array())));
+        $this->assertSame('a, c, b', $testSequence->getSequencedJobListString(), 'Assertion 0.4: Three jobs where b depends on c');
+
+        $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array('c')), new Job('c', array('f')), new Job('d', array('a')), new Job('e', array('b')), new Job('f', array())));
+        $this->assertSame('a, c, b', $testSequence->getSequencedJobListString(), 'Assertion 0.5: Six jobs with more complex dependency structure');
+
+        $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array()), new Job('c', array('c'))));
+        $this->expectExceptionMessage('depend on itself', 'Assertion 0.6: Three jobs where c depends on itself. Should result in an error');
+        $testSequence->getSequencedJobListString();
+
+        $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array('c')), new Job('c', array('f')), new Job('d', array('a')), new Job('e', array()), new Job('f', array('b'))));
+        $this->expectExceptionMessage('circular dependency', 'Assertion 0.7: Complex structure with a circular dependency. Should result in an error');
+        $testSequence->getSequencedJobListString();
+    }
+
     public function testJobCreationString() // Tests for job creation where dependencies are input as a string
     {
         $testJob = new Job('a', '');
