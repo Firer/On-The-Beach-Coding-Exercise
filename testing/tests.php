@@ -249,4 +249,28 @@ class JobTest extends TestCase
 
         $testSequence = new JobSequence(array($testJob1, $testJob2));
     }
+
+    public function testJobSequenceResolveDependencies()
+    {
+        $testJob1 = new Job('a', array());
+        $testJob2 = new Job('b', array('c', 'd'));
+        $testJob3 = new Job('c', array('a', 'd'));
+        $testJob4 = new Job('d', array());
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2, $testJob3, $testJob4));
+        $testSequence->resolveDependencies();
+
+        $this->assertTrue($testSequence->getAllDependenciesResolved(), 'Assertion 2.4: Test dependency resolution in JobSequence');
+    }
+
+    public function testJobSequenceGetSequencedJobList()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array());
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2, $testJob3));
+
+        $this->assertSame(array('c', 'b', 'a'), $testSequence->getSequencedJobList(), 'Assertion 2.5: Check job list sequences correctly');
+    }
 }
