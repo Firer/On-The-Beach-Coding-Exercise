@@ -25,7 +25,7 @@ class JobTest extends TestCase
         $this->assertSame('a, c, b', $testSequence->getSequencedJobListString(), 'Assertion 0.4: Three jobs where b depends on c');
 
         $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array('c')), new Job('c', array('f')), new Job('d', array('a')), new Job('e', array('b')), new Job('f', array())));
-        $this->assertSame('a, c, b', $testSequence->getSequencedJobListString(), 'Assertion 0.5: Six jobs with more complex dependency structure');
+        $this->assertSame('a, f, c, d, b, e', $testSequence->getSequencedJobListString(), 'Assertion 0.5: Six jobs with more complex dependency structure');
 
         $testSequence = new JobSequence(array(new Job('a', array()), new Job('b', array()), new Job('c', array('c'))));
         $this->expectExceptionMessage('depend on itself', 'Assertion 0.6: Three jobs where c depends on itself. Should result in an error');
