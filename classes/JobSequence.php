@@ -50,13 +50,18 @@ class JobSequence
         $this->allDependenciesResolved = true;
     }
 
-    public function getSequencedJobList()
+    public function getSequencedJobList() // Get a sequenced the job list, so that jobs are run after their dependencies
     {
         if (!$this->allDependenciesResolved) $this->resolveDependencies(); // Dependencies must be resolved before creating a sequenced job list
         if ($this->rawJobList === array()) return array(); // If we have no jobs, return an empty array
 
         $this->createSequencedJobList();
         return $this->sequencedJobList;
+    }
+
+    public function getSequencedJobListString() // Get the sequenced job list as a string
+    {
+        return implode(', ', $this->getSequencedJobList());
     }
 
     private function createSequencedJobList() // Creates the sequenced job list based on making sure jobs are run after their dependencies
