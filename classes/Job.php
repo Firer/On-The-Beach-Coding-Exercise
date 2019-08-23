@@ -8,7 +8,7 @@ class Job
     private $dependenciesResolved = 0; // Have the job's dependencies been resolved yet? -1 -> in progress, 0 -> false, 1 -> true
     private $dependencyList = array(); // Array containing the names of the job's dependencies
     private $dependencies = array(); // Array containing references to the job's dependencies
-    private $dependants = array(); // Array containing references to the job's dependants. Possibly not used yet, but could be a useful addition
+    private $dependents = array(); // Array containing references to the job's dependents. Possibly not used yet, but could be a useful addition
 
     function __construct($name, $dependencies)
     {
@@ -46,15 +46,21 @@ class Job
         return $this->dependencies;
     }
 
-    public function getDependants()
+    public function getDependents()
     {
-        return $this->dependants;
+        return $this->dependents;
     }
 
     public function addDependency(&$dependency) // Explicitly use references to jobs
     {
         if (!($dependency instanceof Job))  throw new Exception('Tried to add dependency that isn\'t a Job'); // Check the job is a Job object
         $this->dependencies[] = $dependency;
+    }
+
+    public function addDependent(&$dependent) // Explicitly use references to jobs
+    {
+        if (!($dependent instanceof Job))  throw new Exception('Tried to add dependent that isn\'t a Job'); // Check the job is a Job object
+        $this->dependents[] = $dependent;
     }
 
     public function resolveDependencies(&$jobList) // Explicitly use references to jobs
@@ -68,6 +74,7 @@ class Job
         {
             $this->addDependency($jobList[$dependencyName]); // Add our dependency to this Job
             $jobList[$dependencyName]->resolveDependencies($jobList); // Recursively resolve the added job's dependencies to find if any are circular
+            $jobList[$dependencyName]->addDependent($this); // Add our self as a dependent to the dependency
         }
 
         $this->dependenciesResolved = 1; // This job's dependencies were successfully resolved
