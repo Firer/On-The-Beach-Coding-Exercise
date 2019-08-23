@@ -53,20 +53,20 @@ class Job
 
     public function addDependency(&$dependency) // Explicitly use references to jobs
     {
-        if (!($dependency instanceof Job))  throw new Exception('Tried to add dependency that isn\'t a Job'); // Check the job is a Job object
+        if (!($dependency instanceof Job))  throw new Exception('Job '. $this->jobName . '. Tried to add dependency that isn\'t a Job'); // Check the job is a Job object
         $this->dependencies[] = $dependency;
     }
 
     public function addDependent(&$dependent) // Explicitly use references to jobs
     {
-        if (!($dependent instanceof Job))  throw new Exception('Tried to add dependent that isn\'t a Job'); // Check the job is a Job object
+        if (!($dependent instanceof Job))  throw new Exception('Job '. $this->jobName . '. Tried to add dependent that isn\'t a Job'); // Check the job is a Job object
         $this->dependents[] = $dependent;
     }
 
     public function resolveDependencies(&$jobList) // Explicitly use references to jobs
     {
         if ($this->dependenciesResolved === 1) return; // This job has been resolved already
-        if ($this->dependenciesResolved === -1) throw new Exception('Job '. $this->jobName . 'This job contains a circular dependency'); // We are attempting to resolve this job when we are already trying to resolve it, so it must have a circular dependency
+        if ($this->dependenciesResolved === -1) throw new Exception('Job '. $this->jobName . '. This job contains a circular dependency'); // We are attempting to resolve this job when we are already trying to resolve it, so it must have a circular dependency
 
         $this->dependenciesResolved = -1; // Set flag to signify this Job's dependencies are currently being resolved
 
@@ -82,10 +82,10 @@ class Job
 
     public function run()
     {
-        if ($this->dependenciesResolved !== 1) throw new Exception('Job '. $this->jobName . 'Cannot run job before dependencies are resolved'); // Dependencies must be resolved before we can continue
+        if ($this->dependenciesResolved !== 1) throw new Exception('Job '. $this->jobName . '. Cannot run job before dependencies are resolved'); // Dependencies must be resolved before we can continue
         foreach ($this->dependencies as $dependency)
         {
-            if (!$dependency->jobWasRun()) throw new Exception('Job '. $this->jobName . 'Tried to run job before a dependency has been run'); // Cannot run a job before its dependencies have been run
+            if (!$dependency->jobWasRun()) throw new Exception('Job '. $this->jobName . '. Tried to run job before a dependency has been run'); // Cannot run a job before its dependencies have been run
         }
 
         // Call code to do the job here
@@ -106,12 +106,12 @@ class Job
             }
         } else if (gettype($dependencies) === 'array') {
             foreach ($dependencies as $dependency) {
-                if (gettype($dependency) !== 'string') throw new Exception('Job '. $this->jobName . ': An array of dependencies must contain string values only');
+                if (gettype($dependency) !== 'string') throw new Exception('Job '. $this->jobName . '. An array of dependencies must contain string values only');
             }
 
             return $dependencies;
         } else {
-            throw new Exception('Job '. $this->jobName . 'A job\'s dependencies must be a comma separated string, or an array of strings');
+            throw new Exception('Job '. $this->jobName . '. A job\'s dependencies must be a comma separated string, or an array of strings');
         }
 
         return array();
