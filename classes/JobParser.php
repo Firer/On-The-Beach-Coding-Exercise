@@ -12,8 +12,9 @@ class JobParser // We need to be able to take a string and convert it into Jobs 
                  \(\s*            # First matching option. Look for the opening bracket af an array of dependencies, and allow whitespace after it
                  ([a-z0-9,\s]*)   # Match the text inside the brackets
                  \s*\)\s*         # Find the closing bracket, and allow whitespace around it
-                 ,?               # Look for the comma separator between jobs which may not exist at the end of the input string
-                 |([a-z0-9]*),?   # Second matching option. Look for character(s) followed by a comma separator
+                 (?:,|$)          # Look for the comma separator between jobs, or the end of the input string
+                 |([a-z0-9]*)     # Second matching option. Look for character(s)
+                 (?:,|$)          # Look for the comma separator between jobs, or the end of the input string
                  )/mix';          # m for multi-line matching, i for case-insensitive matching, and x for extended mode to allow comments in the regex
         preg_match_all($regex, $input, $matches, PREG_SET_ORDER);
         return self::inputToJobSequence($matches);
