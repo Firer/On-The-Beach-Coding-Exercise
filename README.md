@@ -18,3 +18,6 @@ Exercise for On The Beach to demonstrate coding, problem solving, and design abi
 * Jobs should have a "run" member function that checks all dependencies are resolved (have been run), runs the job if they are, and throws an error if not. It then sets a member variable to demonstrate the job has finished
 * Make a JobSequence class with a member variable of an array containing the Jobs to sequence, and member functions to sequence it
 * Look for jobs without dependencies and sequence them first. Not strictly necessary, but could be a performance gain for large, complex job lists
+* Core functionality seems to be complete and working as per the tests
+* Does somebody need to be able to use the program to test it out? Make command line utility in sequencer.php
+* Make a demo to show that all specifications in the challenge are met in demo.php
