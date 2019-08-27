@@ -5,7 +5,7 @@ spl_autoload_register(function ($className) {
     include 'classes/'. $className . '.php';
 });
 
-if (!isset($argv) || !isset($argv[1])) exit('This is a command line utility. Use: \'php sequencer.php "job-list"\'' . "\n"); // Check we are running from the command line and the appropriate arguments exist
+if (!isset($argv) || !isset($argv[1])) exit('This is a command line utility. Use: \'php sequencer.php "job-list"\', see \'php sequencer.php help\' for more information' . "\n"); // Check we are running from the command line and the appropriate arguments exist
 
 switch ($argv[1]) // Look for help argument, and output helpful information
 {
@@ -15,7 +15,7 @@ switch ($argv[1]) // Look for help argument, and output helpful information
         echo 'Use: \'php sequencer.php "job-list"\'', "\n\n", 'The job list must be quoted. For example:', "\n", 'php sequencer.php "a => b, b => (c, d), c => , d => , e => (a)"', "\n";
 }
 $input = '';
-if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See "php sequencer.php help" for more info'); // Find the quoted job list string
+if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See \'php sequencer.php help\' for more information'); // Find the quoted job list string
 $output = '';
 
 try
