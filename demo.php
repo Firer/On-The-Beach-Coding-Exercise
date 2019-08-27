@@ -51,8 +51,35 @@ catch (Exception $e)
 
 echo 'Specification 2:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
 
+
 /*
  * Specification 3:
+ *
+ * Given the following job structure:
+ *
+ *     a =>
+ *     b =>
+ *     c =>
+ *
+ * The result should be a sequence that positions c before b, containing all three jobs abc.
+ */
+
+$input = 'a => , b => , c => ';
+$output = '';
+
+try
+{
+    $output = JobParser::parse($input)->getSequencedJobListString();
+}
+catch (Exception $e)
+{
+    $output = $e->getMessage();
+}
+
+echo 'Specification 3:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
+
+/*
+ * Specification 4:
  *
  * Given the following job structure:
  *
@@ -75,11 +102,11 @@ catch (Exception $e)
     $output = $e->getMessage();
 }
 
-echo 'Specification 3:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
+echo 'Specification 4:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
 
 
 /*
- * Specification 4:
+ * Specification 5:
  *
  * Given the following job structure:
  *
@@ -105,11 +132,11 @@ catch (Exception $e)
     $output = $e->getMessage();
 }
 
-echo 'Specification 4:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
+echo 'Specification 5:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
 
 
 /*
- * Specification 5:
+ * Specification 6:
  *
  * Given the following job structure:
  *
@@ -132,11 +159,11 @@ catch (Exception $e)
     $output = $e->getMessage();
 }
 
-echo 'Specification 5:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
+echo 'Specification 6:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
 
 
 /*
- * Specification 6:
+ * Specification 7:
  *
  * Given the following job structure:
  *
@@ -162,4 +189,4 @@ catch (Exception $e)
     $output = $e->getMessage();
 }
 
-echo 'Specification 6:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
+echo 'Specification 7:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
