@@ -5,7 +5,7 @@ spl_autoload_register(function ($className) {
     include 'classes/'. $className . '.php';
 });
 
-if (!isset($argv) || !isset($argv[1])) exit('This is a command line utility. Use: \'php sequencer.php "job-list"\''); // Check we are running from the command line and the appropriate arguments exist
+if (!isset($argv) || !isset($argv[1])) exit('This is a command line utility. Use: \'php sequencer.php "job-list"\'' . "\n"); // Check we are running from the command line and the appropriate arguments exist
 
 switch ($argv[1]) // Look for help argument, and output helpful information
 {
