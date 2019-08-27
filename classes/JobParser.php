@@ -26,7 +26,7 @@ class JobParser // We need to be able to take a string and convert it into Jobs 
 
         foreach ($matches as $match)
         {
-            $dependencies = $match[2] !== '' ? $match[2] : $match[3]; // The match for the dependency string could be in either $match[2] or $match[3] depending on the input format
+            $dependencies = array_key_exists(3, $match) ? $match[3] : $match[2]; // The match for the dependency string could be in either $match[2] or $match[3] depending on the input format. If $match[3] exists then use it as the input was in that format
             $jobs[] = new Job($match[1], $dependencies); // The job name goes in to $match[1]
         }
 
