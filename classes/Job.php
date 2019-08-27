@@ -72,7 +72,7 @@ class Job
 
         foreach ($this->dependencyList as $dependencyName)
         {
-            if ($dependencyName === $this->jobName) throw new Exception('Job '. $this->jobName . ' . A job cannot depend on itself'); // Throw an error if the job depends on itself. It otherwise would have been caught as a circular dependency
+            if ($dependencyName === $this->jobName) throw new Exception('Job '. $this->jobName . '. A job cannot depend on itself'); // Throw an error if the job depends on itself. It otherwise would have been caught as a circular dependency
             if (!array_key_exists($dependencyName, $jobList)) throw new Exception('Job '. $this->jobName . ' . This job has a dependency which does not exist: ' . $dependencyName); // Check we don't have a dependency on a job that doesn't exist in our job list
             $this->addDependency($jobList[$dependencyName]); // Add our dependency to this Job
             $jobList[$dependencyName]->resolveDependencies($jobList); // Recursively resolve the added job's dependencies to find if any are circular
