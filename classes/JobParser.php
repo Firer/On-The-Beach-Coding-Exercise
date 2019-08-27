@@ -8,7 +8,7 @@ class JobParser // We need to be able to take a string and convert it into Jobs 
         $regex = '/\s*            # Allow whitespace at the start of the pattern
                  ([a-z0-9]+)      # Match the job name, which goes in to group [1] of each match
                  \s*=>\s*         # Look for the => separator of job names and job dependencies, and allow whitespace around it
-                 (?:              # Create a non-matching group to allow 2 match options (a bracketed array of dependencies, or a single unbracketed dependency)
+                 (?:              # Create non-capturing group to allow 2 match options (a bracketed array of dependencies, or a single unbracketed dependency)
                  \(\s*            # First matching option. Look for the opening bracket af an array of dependencies, and allow whitespace after it
                  ([a-z0-9,\s]*)   # Match the text inside the brackets
                  \s*\)\s*         # Find the closing bracket, and allow whitespace around it
@@ -26,7 +26,8 @@ class JobParser // We need to be able to take a string and convert it into Jobs 
 
         foreach ($matches as $match)
         {
-            $jobs[] = new Job($match[1], $match[2]);
+            $dependencies = $match[2] !== '' ? $match[2] : $match[3]; // The match for the dependency string could be in either $match[2] or $match[3] depending on the input format
+            $jobs[] = new Job($match[1], $dependencies); // The job name goes in to $match[1]
         }
 
         return new JobSequence($jobs);
