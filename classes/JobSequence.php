@@ -78,6 +78,8 @@ class JobSequence
 
     private function createSequencedJobList() // Creates the sequenced job list based on making sure jobs are run after their dependencies
     {
+        $this->sequencedJobList = array(); // Reset sequenced job list so we don't add to an old one
+
         $jobNamesToSequence = array(); // Create a temporary array of job names that are not jet in the list and populate it
 
         foreach ($this->rawJobList as $jobName => $job)
