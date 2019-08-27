@@ -63,7 +63,7 @@ echo 'Specification 2:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "',
  * The result should be a sequence that positions c before b, containing all three jobs abc.
  */
 
-$input = 'a => , b => c, c=>';
+$input = 'a => , b => c, c => ';
 $output = '';
 
 try
@@ -120,7 +120,7 @@ echo 'Specification 4:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "',
  * The result should be an error stating that jobs can’t depend on themselves.
  */
 
-$input = 'a => , b => c, c => f, d => a, e => b, f => ';
+$input = 'a => , b => , c => c';
 $output = '';
 
 try
@@ -150,7 +150,7 @@ echo 'Specification 5:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "',
  * The result should be an error stating that jobs can’t have circular dependencies.
  */
 
-$input = 'a => , b => c, c => f, d => a, e => b, f => ';
+$input = 'a => , b => c, c => f, d => a, e => , f => b';
 $output = '';
 
 try
