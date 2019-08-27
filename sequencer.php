@@ -16,13 +16,12 @@ switch ($argv[1]) // Look for help argument, and output helpful information
         exit;
 }
 
-$input = '';
-if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See \'php sequencer.php help\' for more information' . "\n"); // Find the quoted job list string
+$input = $argv[1];
 $output = '';
 
 try
 {
-    $output = JobParser::parse($input[1])->getSequencedJobListString(); // Our job string should be in $input[1] from the regular expression match
+    $output = JobParser::parse($input)->getSequencedJobListString(); // Parse our job string
 }
 catch (Exception $e)
 {
