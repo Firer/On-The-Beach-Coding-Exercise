@@ -1,6 +1,86 @@
 # On-The-Beach-Coding-Exercise
 Exercise for On The Beach to demonstrate coding, problem solving, and design abilities.
 
+# How to use
+
+#### On the Beach specification demo
+
+Run:
+
+```
+php demo.php
+```
+
+This should output:
+
+```
+Specification 1:
+Input is: ""
+Output is: ""
+
+Specification 2:
+Input is: "a => "
+Output is: "a"
+
+Specification 3:
+Input is: "a => , b => , c => "
+Output is: "a, b, c"
+
+Specification 4:
+Input is: "a => , b => c, c => "
+Output is: "a, c, b"
+
+Specification 5:
+Input is: "a => , b => c, c => f, d => a, e => b, f => "
+Output is: "a, f, c, d, b, e"
+
+Specification 6:
+Input is: "a => , b => , c => c"
+Output is: "Job c. A job cannot depend on itself"
+
+Specification 7:
+Input is: "a => , b => c, c => f, d => a, e => , f => b"
+Output is: "Job b. This job contains a circular dependency"
+```
+
+#### Command line utility
+
+This is for inputting a custom job list as a string, and receiving a sequenced output.
+
+```
+php sequencer.php "job-list-here"
+```
+
+For example:
+
+```
+# php sequencer.php "a => , b => c, c => f, d => a, e => b, f => "
+
+Job sequencer:
+Input is: "a => , b => c, c => f, d => a, e => b, f => "
+Output is: "a, f, c, d, b, e"
+```
+
+#### Tests
+
+From inside the testing directory, run:
+
+```
+php phpunit.phar tests.php
+```
+
+Output should be similar to:
+
+```
+PHPUnit 8.3.4 by Sebastian Bergmann and contributors.
+
+.....................                                             21 / 21 (100%)
+
+Time: 133 ms, Memory: 10.00 MB
+
+OK (21 tests, 51 assertions)
+```
+
 ### Initial Thoughts
 * Define class for jobs, and create object for each job
 * Each job should contain a reference to any dependencies and possibly dependents too
