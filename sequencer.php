@@ -28,4 +28,4 @@ catch (Exception $e)
     $output = $e->getMessage();
 }
 
-echo 'Job sequencer:', "\n", 'Input is: "', $input[1], '"', "\n", 'Output is: "', $output, '"', "\n\n";
+echo 'Job sequencer:', "\n", 'Input is: "', $input, '"', "\n", 'Output is: "', $output, '"', "\n\n";
