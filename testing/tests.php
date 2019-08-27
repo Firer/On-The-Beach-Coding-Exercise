@@ -329,6 +329,6 @@ class JobTest extends TestCase
 
         $input = 'ab=>, b=>c, c=> ab, d => , e =>(), f=> (), g => (h), h => (d, e)';
         $testSequence = JobParser::parse($input);
-        $this->assertSame('ab, d, e, f, h, g, c, b ', $testSequence->getSequencedJobListString(), 'Assertion 3.4: Check JobParser creates correct jobs complex sequence with varying formatting');
+        $this->assertSame('ab, d, e, f, c, h, b, g', $testSequence->getSequencedJobListString(), 'Assertion 3.4: Check JobParser creates correct jobs complex sequence with varying formatting');
     }
 }
