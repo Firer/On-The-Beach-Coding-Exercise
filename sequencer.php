@@ -13,7 +13,9 @@ switch ($argv[1]) // Look for help argument, and output helpful information
     case '--help':
     case '-h':
         echo 'Use: \'php sequencer.php "job-list"\'', "\n\n", 'The job list must be quoted. For example:', "\n", 'php sequencer.php "a => b, b => (c, d), c => , d => , e => (a)"', "\n";
+        exit;
 }
+
 $input = '';
 if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See \'php sequencer.php help\' for more information'); // Find the quoted job list string
 $output = '';
