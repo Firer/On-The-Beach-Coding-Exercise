@@ -8,7 +8,7 @@ class JobSequence
     private $rawJobList = array(); // Raw job list input
     private $sequencedJobList = array(); // Sequenced job list
 
-    function __construct($jobArray) // Accepts a simple array of jobs
+    function __construct(&$jobArray) // Accepts a simple array of jobs
     {
         foreach ($jobArray as $job)
         {
