@@ -64,6 +64,18 @@ class JobSequence
         return implode(', ', $this->getSequencedJobList());
     }
 
+    public function runAllJobs() // Run all of the sequenced jobs
+    {
+        if (!$this->jobsWereSequenced) $this->getSequencedJobList();
+
+        foreach ($this->sequencedJobList as $jobName)
+        {
+            $this->rawJobList[$jobName]->run();
+        }
+
+        $this->allJobsWereRun = true;
+    }
+
     private function createSequencedJobList() // Creates the sequenced job list based on making sure jobs are run after their dependencies
     {
         $jobNamesToSequence = array(); // Create a temporary array of job names that are not jet in the list and populate it

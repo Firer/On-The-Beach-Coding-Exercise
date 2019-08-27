@@ -299,4 +299,36 @@ class JobTest extends TestCase
 
         $this->assertSame(array('c', 'b', 'a'), $testSequence->getSequencedJobList(), 'Assertion 2.5: Check job list sequences correctly');
     }
+
+    public function testJobSequenceRunAllJobs()
+    {
+        $testJob1 = new Job('a', array('b', 'c'));
+        $testJob2 = new Job('b', array('c'));
+        $testJob3 = new Job('c', array());
+
+        $testSequence = new JobSequence(array($testJob1, $testJob2, $testJob3));
+
+        $testSequence->runAllJobs();
+
+        $this->assertTrue($testSequence->getAllJobsWereRun(), 'Assertion 2.6: Check all jobs were run successfully');
+    }
+
+    public function testJobParserStrings()
+    {
+        $input = '';
+        $testSequence = JobParser::parse($input);
+        $this->assertSame('', $testSequence->getSequencedJobListString(), 'Assertion 3.1: Check JobParser creates correct sequence for empty string');
+
+        $input = 'a=>';
+        $testSequence = JobParser::parse($input);
+        $this->assertSame('a', $testSequence->getSequencedJobListString(), 'Assertion 3.2: Check JobParser creates correct sequence for single job');
+
+        $input = 'a=>b, b=>';
+        $testSequence = JobParser::parse($input);
+        $this->assertSame('b, a', $testSequence->getSequencedJobListString(), 'Assertion 3.3: Check JobParser creates correct sequence for simple sequence');
+
+        $input = 'ab=>, b=>c, c=> ab, d => , e =>(), f=> (), g => (h), h => (d, e)';
+        $testSequence = JobParser::parse($input);
+        $this->assertSame('ab, d, e, f, h, g, c, b ', $testSequence->getSequencedJobListString(), 'Assertion 3.4: Check JobParser creates correct jobs complex sequence with varying formatting');
+    }
 }
