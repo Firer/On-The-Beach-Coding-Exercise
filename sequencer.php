@@ -17,7 +17,7 @@ switch ($argv[1]) // Look for help argument, and output helpful information
 }
 
 $input = '';
-if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See \'php sequencer.php help\' for more information'); // Find the quoted job list string
+if (!preg_match('/["\'](.*?)["\']/', $argv[1], $input)) exit('Bad job list input. See \'php sequencer.php help\' for more information' . "\n"); // Find the quoted job list string
 $output = '';
 
 try
