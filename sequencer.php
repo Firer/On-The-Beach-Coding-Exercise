@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This is a command line utility, which takes a string job list input,
+ * and outputs a sequenced list.
+ *
+ * See "php sequencer.php help" for more information
+ */
+
 // Boilerplate code for automatically loading classes
 spl_autoload_register(function ($className) {
     include 'classes/'. $className . '.php';
